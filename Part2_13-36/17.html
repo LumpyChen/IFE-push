@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>IFE JavaScript Task 01</title>
-    <script src="task.js"></script>
 </head>
 <body>
 <fieldset id="form-gra-time">
@@ -16,7 +15,7 @@
 <fieldset>
     <legend>请选择查看的城市：</legend>
     <select id="city-select">
-        <option>北京</option>
+        <option>--</option>
     </select>
 </fieldset>
 
@@ -87,20 +86,20 @@
     /**
      * 日、周、月的radio事件点击时的处理函数
      */
-    function graTimeChange() {
+    function graTimeChange(e) {
         // 确定是否选项发生了变化
 
         // 设置对应数据
-
+        pageState.nowGraTime = e.target.value
         // 调用图表渲染函数
     }
 
     /**
      * select发生变化时的处理函数
      */
-    function citySelectChange() {
+    function citySelectChange(e) {
         // 确定是否选项发生了变化
-
+        pageState.nowSelectCity = e.target.value;
         // 设置对应数据
 
         // 调用图表渲染函数
@@ -110,6 +109,9 @@
      * 初始化日、周、月的radio事件，当点击时，调用函数graTimeChange
      */
     function initGraTimeForm() {
+        Array.prototype.slice.call(document.getElementsByTagName('input')).forEach(function (ele) {
+            ele.onchange = graTimeChange;
+        });
 
     }
 
@@ -118,9 +120,12 @@
      */
     function initCitySelector() {
         // 读取aqiSourceData中的城市，然后设置id为city-select的下拉列表中的选项
-
+        var citySel = document.getElementById('city-select')
+        for (city in aqiSourceData) {
+            citySel.innerHTML += '<option>'+city+'</option>'
+        }
         // 给select设置事件，当选项发生变化时调用函数citySelectChange
-
+        citySel.onchange = citySelectChange;
     }
 
     /**
@@ -129,6 +134,9 @@
     function initAqiChartData() {
         // 将原始的源数据处理成图表需要的数据格式
         // 处理好的数据存到 chartData 中
+        for (city in aqiSourceData){
+            var day = {}
+        }
     }
 
     /**
@@ -138,6 +146,7 @@
         initGraTimeForm()
         initCitySelector();
         initAqiChartData();
+        console.log(aqiSourceData)
     }
 
     init();
